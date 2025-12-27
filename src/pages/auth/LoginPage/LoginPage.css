@@ -111,7 +111,7 @@
 
 .login-input:focus {
   outline: none;
-  border-color: #2563eb;
+  border-color: #000000;
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
 }
 
@@ -130,7 +130,7 @@
 }
 
 .dark .login-input:focus {
-  border-color: #3b82f6;
+  border-color: #000000;
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
 
@@ -164,7 +164,7 @@
 .login-button {
   width: 100%;
   color: white;
-  background-color: #2563eb;
+  background-color: #010715;
   font-weight: 500;
   border-radius: 0.5rem;
   font-size: 0.875rem;
@@ -176,7 +176,7 @@
 }
 
 .login-button:hover {
-  background-color: #1d4ed8;
+  background-color: #6b7280;
 }
 
 .login-button:focus {
@@ -213,7 +213,7 @@
 
 .login-link {
   font-weight: 500;
-  color: #2563eb;
+  color: #000000;
   text-decoration: none;
   transition: all 0.2s;
 }

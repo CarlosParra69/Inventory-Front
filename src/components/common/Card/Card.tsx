@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import './styles/Card.css';
 
 interface CardProps {
   title?: string;
@@ -9,14 +10,14 @@ interface CardProps {
 
 export const Card = ({ title, children, className = '', actions }: CardProps) => {
   return (
-    <div className={`bg-white rounded-lg shadow-md p-6 ${className}`}>
+    <div className={`card ${className}`}>
       {(title || actions) && (
-        <div className="flex justify-between items-center mb-4">
-          {title && <h3 className="text-xl font-semibold text-gray-800">{title}</h3>}
-          {actions && <div>{actions}</div>}
+        <div className="card-header">
+          {title && <h3 className="card-title">{title}</h3>}
+          {actions && <div className="card-actions">{actions}</div>}
         </div>
       )}
-      <div>{children}</div>
+      <div className="card-body">{children}</div>
     </div>
   );
 };

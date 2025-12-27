@@ -2,12 +2,18 @@ import { useEffect, useState } from 'react';
 import type { AxiosError } from 'axios';
 import { productsService } from '../../api/products.service';
 import { Card, Button, Loading } from '../../components/common';
+import { ProductFormModal, DeleteProductModal } from '../../components/common/Modals';
 import type { Product } from '../../types/product.types';
+import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi';
 
 export const ProductsList = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showFormModal, setShowFormModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     loadProducts();
@@ -23,6 +29,54 @@ export const ProductsList = () => {
       setError(axiosError.response?.data?.message || 'Error al cargar productos');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleNewProduct = () => {
+    setSelectedProduct(null);
+    setShowFormModal(true);
+  };
+
+  const handleEditProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setShowFormModal(true);
+  };
+
+  const handleDeleteClick = (product: Product) => {
+    setSelectedProduct(product);
+    setShowDeleteModal(true);
+  };
+
+  const handleFormSubmit = async (data: any) => {
+    setIsSubmitting(true);
+    try {
+      if (selectedProduct) {
+        await productsService.update(selectedProduct.id, data);
+      } else {
+        await productsService.create(data);
+      }
+      setShowFormModal(false);
+      loadProducts();
+    } catch (err) {
+      const axiosError = err as AxiosError<{ message?: string }>;
+      setError(axiosError.response?.data?.message || 'Error al guardar producto');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!selectedProduct) return;
+    setIsSubmitting(true);
+    try {
+      await productsService.delete(selectedProduct.id);
+      setShowDeleteModal(false);
+      loadProducts();
+    } catch (err) {
+      const axiosError = err as AxiosError<{ message?: string }>;
+      setError(axiosError.response?.data?.message || 'Error al eliminar producto');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -44,24 +98,39 @@ export const ProductsList = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Productos</h1>
-        <Button variant="primary">Nuevo Producto</Button>
+        <h1 className="text-3xl font-bold gap-6">Productos</h1>
+        <Button variant="primary" onClick={handleNewProduct}>
+          <FiPlus /> Nuevo Producto
+        </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
-          <Card key={product.id} title={product.name}>
+          <Card 
+            key={product.id} 
+            title={product.name}
+            actions={
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => handleEditProduct(product)}
+                >
+                  <FiEdit2 />
+                </Button>
+                <Button 
+                  variant="danger" 
+                  size="sm"
+                  onClick={() => handleDeleteClick(product)}
+                >
+                  <FiTrash2 />
+                </Button>
+              </div>
+            }
+          >
             <p className="text-gray-600 mb-2">SKU: {product.sku}</p>
             {product.description && (
               <p className="text-gray-600 mb-4">{product.description}</p>
             )}
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm">
-                Editar
-              </Button>
-              <Button variant="danger" size="sm">
-                Eliminar
-              </Button>
-            </div>
           </Card>
         ))}
       </div>
@@ -70,6 +139,22 @@ export const ProductsList = () => {
           <p className="text-center text-gray-500">No hay productos registrados</p>
         </Card>
       )}
+
+      <ProductFormModal
+        isOpen={showFormModal}
+        onClose={() => setShowFormModal(false)}
+        onSubmit={handleFormSubmit}
+        isLoading={isSubmitting}
+        product={selectedProduct || undefined}
+      />
+
+      <DeleteProductModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDeleteConfirm}
+        isLoading={isSubmitting}
+        productName={selectedProduct?.name}
+      />
     </div>
   );
 };
