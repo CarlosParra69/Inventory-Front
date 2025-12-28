@@ -1,13 +1,14 @@
 import { Link, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../utils/constants';
-import { FiBarChart2, FiPackage, FiTag, FiClipboard } from 'react-icons/fi';
+import { FiBarChart2, FiPackage, FiTag, FiInfo, FiClipboard } from 'react-icons/fi';
 import './styles/Sidebar.css';
 
 const navigationItems = [
   { path: ROUTES.DASHBOARD, label: 'Dashboard', icon: FiBarChart2 },
   { path: ROUTES.PRODUCTS, label: 'Productos', icon: FiPackage },
   { path: ROUTES.CATEGORIES, label: 'Categorías', icon: FiTag },
-  { path: ROUTES.INVENTORY, label: 'Inventario', icon: FiClipboard },
+  { path: ROUTES.INVENTORY, label: 'Stock', icon: FiInfo },
+  { path: ROUTES.AUDITS, label: 'Auditorías', icon: FiClipboard },
 ];
 
 export const Sidebar = () => {

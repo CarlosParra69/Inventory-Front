@@ -29,7 +29,7 @@ export const Header = () => {
         <div className="header-container">
           <h1 className="header-title">
             <FiPackage />
-            Sistema de Inventarios
+            Sistema de Inventario
           </h1>
           <div className="header-actions">
             {user && (

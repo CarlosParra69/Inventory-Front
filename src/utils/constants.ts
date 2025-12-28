@@ -9,6 +9,7 @@ export const ROUTES = {
   PRODUCTS: '/products',
   CATEGORIES: '/categories',
   INVENTORY: '/inventory',
+  AUDITS: '/audits'
 } as const;
 
 export const USER_ROLES = {

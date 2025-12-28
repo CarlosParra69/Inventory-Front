@@ -6,6 +6,7 @@ import { RegisterPage } from '../pages/auth/RegisterPage/RegisterPage';
 import { ProductsList } from '../pages/products/ProductsList';
 import { CategoriesList } from '../pages/categories/CategoriesList';
 import { InventoryView } from '../pages/inventory/InventoryView';
+import { AuditsView } from '../pages/audits/AuditsView';
 import { ROUTES } from '../utils/constants';
 import { tokenService } from '../services/token.service';
 
@@ -65,6 +66,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.INVENTORY,
         element: <InventoryView />,
+      },
+      {
+        path: ROUTES.AUDITS,
+        element: <AuditsView />,
       },
     ],
   },
