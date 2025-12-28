@@ -35,5 +35,13 @@ export const authService = {
   logout: async (refreshToken: string): Promise<void> => {
     await apiClient.post('/auth/logout', { refreshToken } as LogoutRequest);
   },
+
+  /**
+   * Obtiene la información del usuario autenticado
+   */
+  getMe: async () => {
+    const response = await apiClient.get('/auth/me');
+    return response.data;
+  },
 };
 

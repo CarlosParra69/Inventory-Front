@@ -7,6 +7,8 @@ import { ProductsList } from '../pages/products/ProductsList';
 import { CategoriesList } from '../pages/categories/CategoriesList';
 import { InventoryView } from '../pages/inventory/InventoryView';
 import { AuditsView } from '../pages/audits/AuditsView';
+import { MovementsView } from '../pages/movements/MovementsView';
+import { InfoMeView } from '../pages/info-me/InfoMeView';
 import { ROUTES } from '../utils/constants';
 import { tokenService } from '../services/token.service';
 
@@ -70,6 +72,14 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.AUDITS,
         element: <AuditsView />,
+      },
+      {
+        path: ROUTES.MOVEMENTS,
+        element: <MovementsView />,
+      },
+      {
+        path: ROUTES.INFO_ME,
+        element: <InfoMeView />,
       },
     ],
   },

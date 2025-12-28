@@ -9,7 +9,9 @@ export const ROUTES = {
   PRODUCTS: '/products',
   CATEGORIES: '/categories',
   INVENTORY: '/inventory',
-  AUDITS: '/audits'
+  AUDITS: '/audits',
+  MOVEMENTS: '/movements',
+  INFO_ME: '/info-me'
 } as const;
 
 export const USER_ROLES = {

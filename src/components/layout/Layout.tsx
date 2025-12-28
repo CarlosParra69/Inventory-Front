@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
+import './styles/Layout.css';
 
 interface LayoutProps {
   children: ReactNode;
@@ -8,11 +9,11 @@ interface LayoutProps {
 
 export const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="layout-container">
       <Header />
-      <div className="flex">
+      <div className="layout-body">
         <Sidebar />
-        <main className="flex-1 p-6">{children}</main>
+        <main className="layout-main">{children}</main>
       </div>
     </div>
   );
