@@ -59,7 +59,7 @@ export const CategoryFormModal = ({
     >
       <form onSubmit={handleSubmit} className="form">
         <div className="form-group">
-          <label className="form-label">Nombre de la Categoría *</label>
+          <label className="form-label">Nombre de la Categoría</label>
           <input
             type="text"
             name="name"
@@ -87,7 +87,7 @@ export const CategoryFormModal = ({
           <Button type="button" variant="ghost" onClick={onClose}>
             Cancelar
           </Button>
-          <Button type="submit" variant="primary" isLoading={isLoading}>
+          <Button type="submit" variant="success" isLoading={isLoading}>
             {category ? 'Actualizar' : 'Crear'} Categoría
           </Button>
         </div>

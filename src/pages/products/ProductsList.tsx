@@ -103,11 +103,13 @@ export const ProductsList = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold gap-6">Productos</h1>
         {isAdmin && (
-          <Button variant="primary" onClick={handleNewProduct}>
+          <Button variant="success" onClick={handleNewProduct}>
             <FiPlus /> Nuevo Producto
           </Button>
         )}
+        
       </div>
+      <br />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
           <Card 

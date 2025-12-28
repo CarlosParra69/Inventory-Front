@@ -223,8 +223,8 @@
 
 .pagination-btn:hover:not(:disabled) {
   background-color: var(--color-gray-100);
-  border-color: #2563eb;
-  color: #2563eb;
+  border-color: #32353b;
+  color: #3b414d;
 }
 
 .pagination-btn:disabled {
@@ -236,7 +236,7 @@
   min-width: 30px;
   text-align: center;
   font-weight: 600;
-  color: #2563eb;
+  color: #000000;
 }
 
 /* Responsive */

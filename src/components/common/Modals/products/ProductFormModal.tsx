@@ -62,7 +62,7 @@ export const ProductFormModal = ({
     >
       <form onSubmit={handleSubmit} className="form">
         <div className="form-group">
-          <label className="form-label">Nombre del Producto *</label>
+          <label className="form-label">Nombre del Producto</label>
           <input
             type="text"
             name="name"
@@ -75,7 +75,7 @@ export const ProductFormModal = ({
         </div>
 
         <div className="form-group">
-          <label className="form-label">SKU *</label>
+          <label className="form-label">SKU</label>
           <input
             type="text"
             name="sku"
@@ -103,7 +103,7 @@ export const ProductFormModal = ({
           <Button type="button" variant="ghost" onClick={onClose}>
             Cancelar
           </Button>
-          <Button type="submit" variant="primary" isLoading={isLoading}>
+          <Button type="submit" variant="ghost" isLoading={isLoading}>
             {product ? 'Actualizar' : 'Crear'} Producto
           </Button>
         </div>

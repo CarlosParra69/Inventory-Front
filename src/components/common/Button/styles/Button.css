@@ -109,6 +109,13 @@
   opacity: 0.9;
 }
 
+.button-success{
+  color: var(--color-dark-700);
+  background-color: var(--color-green-400);
+  padding: 0.625rem 1.25rem;
+  border: 1px solid var(--color-green-300);
+}
+
 /* GHOST */
 .button-ghost {
   color: var(--color-gray-700);

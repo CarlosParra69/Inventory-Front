@@ -103,6 +103,7 @@ export const InventoryView = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Stock del Inventario</h1>
       </div>
+      <br />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {stock.map((item) => (
           <Card 

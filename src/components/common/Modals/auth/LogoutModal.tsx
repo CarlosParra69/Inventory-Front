@@ -24,14 +24,14 @@ export const LogoutModal = ({
       size="sm"
     >
       <div className="flex flex-col items-center gap-4">
-        <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
-          <FiLogOut className="text-2xl text-blue-600 dark:text-blue-400" />
+        <div className="p-3 bg-white-100 dark:bg-dark-900 rounded-full">
+          <FiLogOut className="text-2xl text-white-600 dark:text-white-400" />
         </div>
         <div className="text-center">
-          <p className="text-gray-700 dark:text-gray-300 mb-2">
+          <p className="text-dark-700 dark:text-dark-300 mb-2">
             ¿Estás seguro de que deseas cerrar sesión?
           </p>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-dark-500 dark:text-dark-400">
             Sesión de: <strong>{userName}</strong>
           </p>
         </div>

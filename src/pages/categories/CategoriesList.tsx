@@ -103,11 +103,12 @@ export const CategoriesList = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Categorías</h1>
         {isAdmin && (
-          <Button variant="primary" onClick={handleNewCategory}>
+          <Button variant="success" onClick={handleNewCategory}>
             <FiPlus /> Nueva Categoría
           </Button>
         )}
       </div>
+      <br />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {categories.map((category) => (
           <Card 

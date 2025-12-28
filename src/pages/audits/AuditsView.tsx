@@ -10,7 +10,7 @@ export const AuditsView = () => {
   const [audits, setAudits] = useState<AuditLog[]>([]);
   const [pagination, setPagination] = useState({
     page: 1,
-    limit: 15,
+    limit: 6,
     total: 0,
     totalPages: 0,
   });
