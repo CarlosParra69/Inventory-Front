@@ -30,12 +30,22 @@ export const Sidebar = () => {
     navigate(ROUTES.LOGIN, { replace: true });
   };
 
+  // Filtrar items de navegación según el rol del usuario
+  const filteredNavItems = navigationItems.filter((item) => {
+    // Solo ADMIN puede ver Auditorías
+    if (item.path === ROUTES.AUDITS) {
+      return user?.role === 'ADMIN';
+    }
+    // Todos los demás items son visibles para todos
+    return true;
+  });
+
   return (
     <>
       <aside className="sidebar">
         <nav className="sidebar-nav">
           <ul className="sidebar-list">
-            {navigationItems.map((item) => {
+            {filteredNavItems.map((item) => {
               const isActive = location.pathname === item.path;
               const IconComponent = item.icon;
               return (

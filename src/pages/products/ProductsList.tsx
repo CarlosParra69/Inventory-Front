@@ -5,6 +5,7 @@ import { Card, Button, Loading } from '../../components/common';
 import { ProductFormModal, DeleteProductModal } from '../../components/common/Modals';
 import type { Product } from '../../types/product.types';
 import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi';
+import { useAuth } from '../../hooks/useAuth';
 
 export const ProductsList = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -14,6 +15,8 @@ export const ProductsList = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'ADMIN';
 
   useEffect(() => {
     loadProducts();
@@ -99,9 +102,11 @@ export const ProductsList = () => {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold gap-6">Productos</h1>
-        <Button variant="primary" onClick={handleNewProduct}>
-          <FiPlus /> Nuevo Producto
-        </Button>
+        {isAdmin && (
+          <Button variant="primary" onClick={handleNewProduct}>
+            <FiPlus /> Nuevo Producto
+          </Button>
+        )}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
@@ -109,22 +114,24 @@ export const ProductsList = () => {
             key={product.id} 
             title={product.name}
             actions={
-              <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => handleEditProduct(product)}
-                >
-                  <FiEdit2 />
-                </Button>
-                <Button 
-                  variant="danger" 
-                  size="sm"
-                  onClick={() => handleDeleteClick(product)}
-                >
-                  <FiTrash2 />
-                </Button>
-              </div>
+              isAdmin && (
+                <div className="flex gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => handleEditProduct(product)}
+                  >
+                    <FiEdit2 />
+                  </Button>
+                  <Button 
+                    variant="danger" 
+                    size="sm"
+                    onClick={() => handleDeleteClick(product)}
+                  >
+                    <FiTrash2 />
+                  </Button>
+                </div>
+              )
             }
           >
             <p className="text-gray-600 mb-2">SKU: {product.sku}</p>

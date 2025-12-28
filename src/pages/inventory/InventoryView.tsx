@@ -5,6 +5,7 @@ import { Card, Button, Loading } from '../../components/common';
 import { StockEntryModal, StockExitModal} from '../../components/common/Modals';
 import type { StockItem } from '../../types/inventory.types';
 import { FiPlus, FiMinus} from 'react-icons/fi';
+import { useAuth } from '../../hooks/useAuth';
 
 export const InventoryView = () => {
   const [stock, setStock] = useState<StockItem[]>([]);
@@ -14,6 +15,8 @@ export const InventoryView = () => {
   const [showExitModal, setShowExitModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<StockItem | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'ADMIN';
 
   useEffect(() => {
     loadStock();
@@ -106,24 +109,26 @@ export const InventoryView = () => {
             key={item.product_id} 
             title={item.product_name}
             actions={
-              <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => handleEntryClick(item)}
-                  title="Entrada de stock"
-                >
-                  <FiPlus />
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => handleExitClick(item)}
-                  title="Salida de stock"
-                >
-                  <FiMinus />
-                </Button>
-              </div>
+              isAdmin && (
+                <div className="flex gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => handleEntryClick(item)}
+                    title="Entrada de stock"
+                  >
+                    <FiPlus />
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => handleExitClick(item)}
+                    title="Salida de stock"
+                  >
+                    <FiMinus />
+                  </Button>
+                </div>
+              )
             }
           >
             <div className="flex items-center justify-between">

@@ -5,6 +5,7 @@ import { Card, Button, Loading } from '../../components/common';
 import { CategoryFormModal, DeleteCategoryModal } from '../../components/common/Modals';
 import type { Category } from '../../types/category.types';
 import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi';
+import { useAuth } from '../../hooks/useAuth';
 
 export const CategoriesList = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -14,6 +15,8 @@ export const CategoriesList = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'ADMIN';
 
   useEffect(() => {
     loadCategories();
@@ -99,9 +102,11 @@ export const CategoriesList = () => {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Categorías</h1>
-        <Button variant="primary" onClick={handleNewCategory}>
-          <FiPlus /> Nueva Categoría
-        </Button>
+        {isAdmin && (
+          <Button variant="primary" onClick={handleNewCategory}>
+            <FiPlus /> Nueva Categoría
+          </Button>
+        )}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {categories.map((category) => (
@@ -109,22 +114,24 @@ export const CategoriesList = () => {
             key={category.id} 
             title={category.name}
             actions={
-              <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => handleEditCategory(category)}
-                >
-                  <FiEdit2 />
-                </Button>
-                <Button 
-                  variant="danger" 
-                  size="sm"
-                  onClick={() => handleDeleteClick(category)}
-                >
-                  <FiTrash2 />
-                </Button>
-              </div>
+              isAdmin && (
+                <div className="flex gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => handleEditCategory(category)}
+                  >
+                    <FiEdit2 />
+                  </Button>
+                  <Button 
+                    variant="danger" 
+                    size="sm"
+                    onClick={() => handleDeleteClick(category)}
+                  >
+                    <FiTrash2 />
+                  </Button>
+                </div>
+              )
             }
           >
             {category.description && (
