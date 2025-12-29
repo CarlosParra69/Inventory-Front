@@ -1,14 +1,20 @@
 import { useEffect, useState } from 'react';
 import type { AxiosError } from 'axios';
 import { productsService } from '../../api/products.service';
+import { categoriesService } from '../../api/categories.service';
+import { inventoryService } from '../../api/inventory.service';
 import { Card, Button, Loading } from '../../components/common';
 import { ProductFormModal, DeleteProductModal } from '../../components/common/Modals';
 import type { Product } from '../../types/product.types';
+import type { Category } from '../../types/category.types';
+import type { StockItem } from '../../types/inventory.types';
 import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi';
 import { useAuth } from '../../hooks/useAuth';
 
 export const ProductsList = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [stockItems, setStockItems] = useState<StockItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showFormModal, setShowFormModal] = useState(false);
@@ -19,20 +25,36 @@ export const ProductsList = () => {
   const isAdmin = user?.role === 'ADMIN';
 
   useEffect(() => {
-    loadProducts();
+    loadData();
   }, []);
 
-  const loadProducts = async () => {
+  const loadData = async () => {
     try {
       setIsLoading(true);
-      const data = await productsService.getAll();
-      setProducts(data);
+      const [productsData, categoriesData, stockData] = await Promise.all([
+        productsService.getAll(),
+        categoriesService.getAll(),
+        inventoryService.getStock(),
+      ]);
+      setProducts(productsData);
+      setCategories(categoriesData);
+      setStockItems(stockData);
     } catch (err) {
       const axiosError = err as AxiosError<{ message?: string }>;
-      setError(axiosError.response?.data?.message || 'Error al cargar productos');
+      setError(axiosError.response?.data?.message || 'Error al cargar datos');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const getCategoryName = (categoryId: string): string => {
+    const category = categories.find((cat) => cat.id === categoryId);
+    return category?.name || 'Sin categoría';
+  };
+
+  const getProductStock = (productId: string): number | null => {
+    const stockItem = stockItems.find((item) => item.product_id === productId);
+    return stockItem?.stock ?? null;
   };
 
   const handleNewProduct = () => {
@@ -59,7 +81,7 @@ export const ProductsList = () => {
         await productsService.create(data);
       }
       setShowFormModal(false);
-      loadProducts();
+      loadData();
     } catch (err) {
       const axiosError = err as AxiosError<{ message?: string }>;
       setError(axiosError.response?.data?.message || 'Error al guardar producto');
@@ -74,7 +96,7 @@ export const ProductsList = () => {
     try {
       await productsService.delete(selectedProduct.id);
       setShowDeleteModal(false);
-      loadProducts();
+      loadData();
     } catch (err) {
       const axiosError = err as AxiosError<{ message?: string }>;
       setError(axiosError.response?.data?.message || 'Error al eliminar producto');
@@ -91,7 +113,7 @@ export const ProductsList = () => {
     return (
       <div className="bg-red-50 border border-red-200 rounded-lg p-4">
         <p className="text-red-800">{error}</p>
-        <Button onClick={loadProducts} variant="outline" className="mt-4">
+        <Button onClick={loadData} variant="outline" className="mt-4">
           Reintentar
         </Button>
       </div>
@@ -138,8 +160,19 @@ export const ProductsList = () => {
           >
             <p className="text-gray-600 mb-2">SKU: {product.sku}</p>
             {product.description && (
-              <p className="text-gray-600 mb-4">{product.description}</p>
+              <p className="text-gray-600 mb-2">{product.description}</p>
             )}
+            {(() => {
+              const stock = getProductStock(product.id);
+              return stock !== null ? (
+                <p className="text-gray-600 mb-2">
+                  Unidades en stock: <strong>{stock}</strong>
+                </p>
+              ) : null;
+            })()}
+            <p className="text-gray-600">
+              Categoría: <strong>{getCategoryName(product.category_id)}</strong>
+            </p>
           </Card>
         ))}
       </div>

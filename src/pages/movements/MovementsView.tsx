@@ -55,12 +55,20 @@ export const MovementsView = () => {
     }
   };
 
-  const getMovementColor = (type: 'IN' | 'OUT'): string => {
-    return type === 'IN' ? '#10b981' : '#ef4444';
+  // Normalizar el tipo de movimiento eliminando espacios
+  const normalizeMovementType = (type: string): 'IN' | 'OUT' => {
+    const normalized = type?.trim().toUpperCase();
+    return normalized === 'IN' ? 'IN' : 'OUT';
   };
 
-  const getMovementLabel = (type: 'IN' | 'OUT'): string => {
-    return type === 'IN' ? 'Entrada' : 'Salida';
+  const getMovementColor = (type: string): string => {
+    const normalized = normalizeMovementType(type);
+    return normalized === 'IN' ? '#10b981' : '#ef4444';
+  };
+
+  const getMovementLabel = (type: string): string => {
+    const normalized = normalizeMovementType(type);
+    return normalized === 'IN' ? 'Entrada' : 'Salida';
   };
 
   const formatDate = (dateString: string): string => {
@@ -127,7 +135,7 @@ export const MovementsView = () => {
                     <td className="movement-product">{movement.productName || 'Producto desconocido'}</td>
                     <td>
                       <div className="movement-type-badge">
-                        {movement.movement_type === 'IN' ? (
+                        {normalizeMovementType(movement.movement_type) === 'IN' ? (
                           <FiArrowDown className="type-icon" style={{ color: '#10b981' }} />
                         ) : (
                           <FiArrowUp className="type-icon" style={{ color: '#ef4444' }} />
@@ -141,8 +149,8 @@ export const MovementsView = () => {
                       </div>
                     </td>
                     <td className="movement-quantity">
-                      <span className={`quantity ${movement.movement_type}`}>
-                        {movement.movement_type === 'IN' ? '+' : '-'}
+                      <span className={`quantity ${normalizeMovementType(movement.movement_type)}`}>
+                        {normalizeMovementType(movement.movement_type) === 'OUT' ? '-' : ''}
                         {movement.quantity}
                       </span>
                     </td>
