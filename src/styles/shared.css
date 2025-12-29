@@ -83,7 +83,7 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 @media (min-width: 768px) {
@@ -95,30 +95,32 @@
 .form-group {
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
 }
 
 .form-label {
   display: block;
-  margin-bottom: 0.5rem;
   font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--color-gray-900);
+  font-weight: 600;
+  color: var(--color-dark-900);
+  letter-spacing: 0.3px;
 }
 
 .dark .form-label {
-  color: white;
+  color: rgb(14, 9, 9);
 }
 
 .form-input,
 .form-textarea,
 .form-select {
   background-color: var(--color-gray-50);
-  border: 1px solid var(--color-gray-300);
+  border: 2px solid var(--color-gray-400);
   color: var(--color-gray-900);
   font-size: 0.875rem;
   border-radius: 0.5rem;
-  padding: 0.625rem;
+  padding: 0.75rem 0.875rem;
   width: 100%;
+  min-height: 2.5rem;
   transition: all 0.2s;
   font-family: inherit;
 }
@@ -136,12 +138,19 @@
   color: var(--color-gray-400);
 }
 
+/* Estilos específicos para textarea */
+.form-textarea {
+  min-height: 6rem;
+  resize: vertical;
+  line-height: 1.5;
+}
+
 .dark .form-input,
 .dark .form-textarea,
 .dark .form-select {
   background-color: var(--color-gray-700);
-  border-color: var(--color-gray-600);
-  color: white;
+  border-color: var(--color-gray-500);
+  color: rgb(0, 0, 0);
 }
 
 .dark .form-input::placeholder,

@@ -63,7 +63,7 @@ export const StockEntryModal = ({
     >
       <form onSubmit={handleSubmit} className="form">
         <div className="form-group">
-          <label className="form-label">Cantidad *</label>
+          <label className="form-label">Cantidad: </label>
           <input
             type="number"
             name="quantity"
@@ -77,7 +77,7 @@ export const StockEntryModal = ({
         </div>
 
         <div className="form-group">
-          <label className="form-label">Razón *</label>
+          <label className="form-label">Razón: </label>
           <textarea
             name="reason"
             value={formData.reason}
@@ -93,7 +93,7 @@ export const StockEntryModal = ({
           <Button type="button" variant="ghost" onClick={onClose}>
             Cancelar
           </Button>
-          <Button type="submit" variant="primary" isLoading={isLoading}>
+          <Button type="submit" variant="success" isLoading={isLoading}>
             Registrar Entrada
           </Button>
         </div>

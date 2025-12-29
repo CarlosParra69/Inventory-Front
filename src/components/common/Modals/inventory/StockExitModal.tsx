@@ -67,9 +67,10 @@ export const StockExitModal = ({
       <form onSubmit={handleSubmit} className="form">
         <div className="form-group">
           <label className="form-label">
-            Cantidad * (Disponible: {availableStock})
+            Cantidad disponible: {availableStock}
           </label>
-          <input
+          <div>
+            <input
             type="number"
             name="quantity"
             value={formData.quantity}
@@ -78,12 +79,14 @@ export const StockExitModal = ({
             placeholder="Cantidad a retirar"
             min="1"
             max={availableStock}
-          />
+            />
+          </div>
+          
           {errors.quantity && <p className="form-error-message">{errors.quantity}</p>}
         </div>
 
         <div className="form-group">
-          <label className="form-label">Razón *</label>
+          <label className="form-label">Razón: </label>
           <textarea
             name="reason"
             value={formData.reason}
@@ -99,7 +102,7 @@ export const StockExitModal = ({
           <Button type="button" variant="ghost" onClick={onClose}>
             Cancelar
           </Button>
-          <Button type="submit" variant="primary" isLoading={isLoading}>
+          <Button type="submit" variant="danger" isLoading={isLoading}>
             Registrar Salida
           </Button>
         </div>

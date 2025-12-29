@@ -90,6 +90,14 @@
   margin-bottom: 1.5rem;
 }
 
+.modal-body .form {
+  gap: 1.5rem;
+}
+
+.modal-body .form-group {
+  margin-bottom: 0.25rem;
+}
+
 .modal-footer {
   display: flex;
   gap: 1rem;

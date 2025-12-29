@@ -26,12 +26,13 @@ export const DeleteProductModal = ({
       <div className="flex flex-col items-center gap-4">
         <FiAlertTriangle className="text-4xl text-red-500" />
         <div className="text-center">
-          <p className="text-gray-700 dark:text-gray-300 mb-2">
+          <p className="text-dark-700 dark:text-dark-300 mb-2">
             ¿Estás seguro de que deseas eliminar <strong>{productName}</strong>?
           </p>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-dark-500 dark:text-dark-400">
             Esta acción no se puede deshacer.
           </p>
+          <br />
         </div>
       </div>
 
