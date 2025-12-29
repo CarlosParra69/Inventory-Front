@@ -1,18 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Modal, Button } from '../../index';
+import { categoriesService } from '../../../../api/categories.service';
+import type { Category } from '../../../../types/category.types';
+import "../../../../styles/shared.css"
 
 interface ProductFormModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (data: ProductFormData) => void;
   isLoading?: boolean;
-  product?: { id: string | number; name: string; sku: string; description?: string | null };
+  product?: { id: string | number; name: string; sku: string; description?: string | null; category_id: string };
 }
 
 export interface ProductFormData {
   name: string;
   sku: string;
   description?: string;
+  category_id: string;
 }
 
 export const ProductFormModal = ({ 
@@ -22,15 +26,37 @@ export const ProductFormModal = ({
   isLoading = false,
   product 
 }: ProductFormModalProps) => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(false);
   const [formData, setFormData] = useState<ProductFormData>({
     name: product?.name || '',
     sku: product?.sku || '',
     description: product?.description || '',
+    category_id: product?.category_id || '',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  // Cargar categorías cuando se abre el modal
+  useEffect(() => {
+    if (isOpen) {
+      loadCategories();
+    }
+  }, [isOpen]);
+
+  const loadCategories = async () => {
+    try {
+      setCategoriesLoading(true);
+      const data = await categoriesService.getAll();
+      setCategories(data);
+    } catch (err) {
+      console.error('Error loading categories:', err);
+    } finally {
+      setCategoriesLoading(false);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     if (errors[name]) {
@@ -42,6 +68,7 @@ export const ProductFormModal = ({
     const newErrors: Record<string, string> = {};
     if (!formData.name.trim()) newErrors.name = 'El nombre es requerido';
     if (!formData.sku.trim()) newErrors.sku = 'El SKU es requerido';
+    if (!formData.category_id) newErrors.category_id = 'La categoría es requerida';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -50,7 +77,7 @@ export const ProductFormModal = ({
     e.preventDefault();
     if (validate()) {
       onSubmit(formData);
-      setFormData({ name: '', sku: '', description: '' });
+      setFormData({ name: '', sku: '', description: '', category_id: '' });
     }
   };
 
@@ -62,13 +89,13 @@ export const ProductFormModal = ({
     >
       <form onSubmit={handleSubmit} className="form">
         <div className="form-group">
-          <label className="form-label">Nombre del Producto</label>
+          <label className="form-label">Nombre del Producto </label>
           <input
             type="text"
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className={`form-input ${errors.name ? 'form-input-error' : ''}`}
+            className="form-input"
             placeholder="Ej: Laptop"
           />
           {errors.name && <p className="form-error-message">{errors.name}</p>}
@@ -88,7 +115,7 @@ export const ProductFormModal = ({
         </div>
 
         <div className="form-group">
-          <label className="form-label">Descripción</label>
+          <label className="form-label">Descripción </label>
           <textarea
             name="description"
             value={formData.description}
@@ -97,6 +124,25 @@ export const ProductFormModal = ({
             placeholder="Descripción del producto"
             rows={4}
           />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Categoría</label>
+          <select
+            name="category_id"
+            value={formData.category_id}
+            onChange={handleChange}
+            className={`form-input ${errors.category_id ? 'form-input-error' : ''}`}
+            disabled={categoriesLoading}
+          >
+            <option value="">Seleccionar una categoría</option>
+            {categories.map(category => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+          {errors.category_id && <p className="form-error-message">{errors.category_id}</p>}
         </div>
 
         <div className="modal-footer">

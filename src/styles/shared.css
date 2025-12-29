@@ -2,9 +2,9 @@
 
 /* ========== COLORES Y VARIABLES ========== */
 :root {
-  --color-primary: #2563eb;
-  --color-primary-dark: #1d4ed8;
-  --color-primary-light: #3b82f6;
+  --color-primary: #000000;
+  --color-primary-dark: #000000;
+  --color-primary-light: #000000;
   --color-danger: #ef4444;
   --color-danger-light: #f87171;
   --color-success: #10b981;
@@ -125,6 +125,27 @@
   font-family: inherit;
 }
 
+/* Estilos específicos para select */
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.25rem;
+  padding-right: 2.5rem;
+}
+
+.form-select:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.form-select:disabled {
+  background-color: var(--color-gray-100);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .form-input:focus,
 .form-textarea:focus,
 .form-select:focus {
@@ -151,6 +172,14 @@
   background-color: var(--color-gray-700);
   border-color: var(--color-gray-500);
   color: rgb(0, 0, 0);
+}
+
+.dark .form-select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
+.dark .form-select:hover:not(:disabled) {
+  border-color: var(--color-primary-light);
 }
 
 .dark .form-input::placeholder,
