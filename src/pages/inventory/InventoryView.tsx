@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { AxiosError } from 'axios';
+import Swal from 'sweetalert2';
 import { inventoryService } from '../../api/inventory.service';
 import { Card, Button, Loading } from '../../components/common';
 import { StockEntryModal, StockExitModal} from '../../components/common/Modals';
@@ -54,11 +55,23 @@ export const InventoryView = () => {
         quantity: data.quantity,
         reason: data.reason,
       });
+      await Swal.fire({
+        icon: 'success',
+        title: 'Entrada registrada',
+        text: `Se registró una entrada de ${data.quantity} unidades para ${selectedItem.product_name}.`,
+        confirmButtonColor: '#2563eb',
+      });
       setShowEntryModal(false);
       loadStock();
     } catch (err) {
       const axiosError = err as AxiosError<{ message?: string }>;
-      setError(axiosError.response?.data?.message || 'Error al registrar entrada');
+      const errorMessage = axiosError.response?.data?.message || 'Error al registrar entrada';
+      await Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: errorMessage,
+        confirmButtonColor: '#2563eb',
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -73,11 +86,23 @@ export const InventoryView = () => {
         quantity: data.quantity,
         reason: data.reason,
       });
+      await Swal.fire({
+        icon: 'success',
+        title: 'Salida registrada',
+        text: `Se registró una salida de ${data.quantity} unidades para ${selectedItem.product_name}.`,
+        confirmButtonColor: '#2563eb',
+      });
       setShowExitModal(false);
       loadStock();
     } catch (err) {
       const axiosError = err as AxiosError<{ message?: string }>;
-      setError(axiosError.response?.data?.message || 'Error al registrar salida');
+      const errorMessage = axiosError.response?.data?.message || 'Error al registrar salida';
+      await Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: errorMessage,
+        confirmButtonColor: '#2563eb',
+      });
     } finally {
       setIsSubmitting(false);
     }

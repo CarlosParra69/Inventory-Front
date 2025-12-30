@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { AxiosError } from 'axios';
+import Swal from 'sweetalert2';
 import { productsService } from '../../api/products.service';
 import { categoriesService } from '../../api/categories.service';
 import { inventoryService } from '../../api/inventory.service';
@@ -77,14 +78,32 @@ export const ProductsList = () => {
     try {
       if (selectedProduct) {
         await productsService.update(selectedProduct.id, data);
+        await Swal.fire({
+          icon: 'success',
+          title: 'Producto actualizado',
+          text: 'El producto ha sido actualizado exitosamente.',
+          confirmButtonColor: '#2563eb',
+        });
       } else {
         await productsService.create(data);
+        await Swal.fire({
+          icon: 'success',
+          title: 'Producto creado',
+          text: 'El producto ha sido creado exitosamente.',
+          confirmButtonColor: '#2563eb',
+        });
       }
       setShowFormModal(false);
       loadData();
     } catch (err) {
       const axiosError = err as AxiosError<{ message?: string }>;
-      setError(axiosError.response?.data?.message || 'Error al guardar producto');
+      const errorMessage = axiosError.response?.data?.message || 'Error al guardar producto';
+      await Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: errorMessage,
+        confirmButtonColor: '#2563eb',
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -95,11 +114,23 @@ export const ProductsList = () => {
     setIsSubmitting(true);
     try {
       await productsService.delete(selectedProduct.id);
+      await Swal.fire({
+        icon: 'success',
+        title: 'Producto eliminado',
+        text: 'El producto ha sido eliminado exitosamente.',
+        confirmButtonColor: '#2563eb',
+      });
       setShowDeleteModal(false);
       loadData();
     } catch (err) {
       const axiosError = err as AxiosError<{ message?: string }>;
-      setError(axiosError.response?.data?.message || 'Error al eliminar producto');
+      const errorMessage = axiosError.response?.data?.message || 'Error al eliminar producto';
+      await Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: errorMessage,
+        confirmButtonColor: '#2563eb',
+      });
     } finally {
       setIsSubmitting(false);
     }

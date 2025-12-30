@@ -59,6 +59,12 @@ export const RegisterPage = () => {
     setIsLoading(true);
     try {
       await register(formData);
+      await Swal.fire({
+        icon: 'success',
+        title: 'Registro exitoso',
+        text: 'Tu cuenta ha sido creada correctamente. Bienvenido!',
+        confirmButtonColor: '#2563eb',
+      });
       navigate(ROUTES.DASHBOARD);
     } catch (error) {
       setIsLoading(false);
@@ -94,12 +100,14 @@ export const RegisterPage = () => {
         text = 'Ocurrió un error en el servidor. Por favor, intenta más tarde.';
       }
 
-      Swal.fire({
+      await Swal.fire({
         icon: 'error',
         title: title,
         text: text,
         confirmButtonColor: '#2563eb',
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 

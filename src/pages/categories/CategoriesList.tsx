@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { AxiosError } from 'axios';
+import Swal from 'sweetalert2';
 import { categoriesService } from '../../api/categories.service';
 import { Card, Button, Loading } from '../../components/common';
 import { CategoryFormModal, DeleteCategoryModal } from '../../components/common/Modals';
@@ -55,14 +56,32 @@ export const CategoriesList = () => {
     try {
       if (selectedCategory) {
         await categoriesService.update(selectedCategory.id, data);
+        await Swal.fire({
+          icon: 'success',
+          title: 'Categoría actualizada',
+          text: 'La categoría ha sido actualizada exitosamente.',
+          confirmButtonColor: '#2563eb',
+        });
       } else {
         await categoriesService.create(data);
+        await Swal.fire({
+          icon: 'success',
+          title: 'Categoría creada',
+          text: 'La categoría ha sido creada exitosamente.',
+          confirmButtonColor: '#2563eb',
+        });
       }
       setShowFormModal(false);
       loadCategories();
     } catch (err) {
       const axiosError = err as AxiosError<{ message?: string }>;
-      setError(axiosError.response?.data?.message || 'Error al guardar categoría');
+      const errorMessage = axiosError.response?.data?.message || 'Error al guardar categoría';
+      await Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: errorMessage,
+        confirmButtonColor: '#2563eb',
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -73,11 +92,23 @@ export const CategoriesList = () => {
     setIsSubmitting(true);
     try {
       await categoriesService.delete(selectedCategory.id);
+      await Swal.fire({
+        icon: 'success',
+        title: 'Categoría eliminada',
+        text: 'La categoría ha sido eliminada exitosamente.',
+        confirmButtonColor: '#2563eb',
+      });
       setShowDeleteModal(false);
       loadCategories();
     } catch (err) {
       const axiosError = err as AxiosError<{ message?: string }>;
-      setError(axiosError.response?.data?.message || 'Error al eliminar categoría');
+      const errorMessage = axiosError.response?.data?.message || 'Error al eliminar categoría';
+      await Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: errorMessage,
+        confirmButtonColor: '#2563eb',
+      });
     } finally {
       setIsSubmitting(false);
     }

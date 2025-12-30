@@ -54,6 +54,16 @@ apiClient.interceptors.response.use(
 
     // Si el error es 401 y no hemos intentado refrescar el token
     if (error.response?.status === 401 && !originalRequest._retry) {
+      // No intentar refrescar token si es una petición de login o registro
+      // Dejar que el error se propague para que el componente lo maneje
+      const isAuthEndpoint = originalRequest.url?.includes('/auth/login') || 
+                             originalRequest.url?.includes('/auth/register');
+      
+      if (isAuthEndpoint) {
+        // Para login/register, simplemente rechazar el error sin redirigir
+        return Promise.reject(error);
+      }
+
       if (isRefreshing) {
         // Si ya hay un refresh en proceso, encolar la petición
         return new Promise((resolve, reject) => {
@@ -77,10 +87,15 @@ apiClient.interceptors.response.use(
 
       if (!refreshToken) {
         // No hay refresh token, limpiar todo y redirigir a login
+        // Solo redirigir si no estamos ya en la página de login
         tokenService.clearTokens();
         processQueue(error, null);
         isRefreshing = false;
-        window.location.href = '/login';
+        
+        // Verificar si ya estamos en la página de login para evitar redirecciones innecesarias
+        if (!window.location.pathname.includes('/login') && !window.location.pathname.includes('/register')) {
+          window.location.href = '/login';
+        }
         return Promise.reject(error);
       }
 

@@ -37,11 +37,12 @@ export const LoginPage = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    e.stopPropagation();
     
     if (!validate()) {
-      Swal.fire({
+      await Swal.fire({
         icon: 'error',
         title: 'Error de validación',
         text: 'Por favor, completa todos los campos correctamente',
@@ -58,7 +59,6 @@ export const LoginPage = () => {
         navigate(ROUTES.DASHBOARD);
       }, 100);
     } catch (error) {
-      setIsLoading(false);
       const axiosError = error as AxiosError<{ message?: string }>;
       const errorMessage = axiosError.response?.data?.message || axiosError.message || 'Error al iniciar sesión';
       
@@ -86,12 +86,14 @@ export const LoginPage = () => {
         text = 'Ocurrió un error en el servidor. Por favor, intenta más tarde.';
       }
 
-      Swal.fire({
+      await Swal.fire({
         icon: 'error',
         title: title,
         text: text,
         confirmButtonColor: '#2563eb',
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -106,6 +108,7 @@ export const LoginPage = () => {
             <form
               className="login-form"
               onSubmit={handleSubmit}
+              noValidate
             >
               <div className="login-form-group">
                 <label
