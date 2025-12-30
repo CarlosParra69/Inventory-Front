@@ -53,7 +53,7 @@ export const AuditsView = () => {
         return '#3b82f6';
       case 'SOFT_DELETE':
         return '#ef4444';
-      case 'RESTORE':
+      case 'RESTORE': // Implementaremos Restauracion a Categorias y Productos Eliminados Mas Adelante
         return '#8b5cf6';
       default:
         return '#6b7280';
@@ -113,6 +113,7 @@ export const AuditsView = () => {
                         style={{ backgroundColor: getActionColor(audit.action) }}
                       >
                         {audit.action === 'SOFT_DELETE' ? 'ELIMINAR' : audit.action}
+                        
                       </span>
                     </td>
                     <td className="audit-resource">{audit.resource}</td>

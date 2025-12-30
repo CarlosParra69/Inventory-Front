@@ -29,10 +29,10 @@ export const ProductFormModal = ({
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoriesLoading, setCategoriesLoading] = useState(false);
   const [formData, setFormData] = useState<ProductFormData>({
-    name: product?.name || '',
-    sku: product?.sku || '',
-    description: product?.description || '',
-    category_id: product?.category_id || '',
+    name: '',
+    sku: '',
+    description: '',
+    category_id: '',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -43,6 +43,28 @@ export const ProductFormModal = ({
       loadCategories();
     }
   }, [isOpen]);
+
+  // Actualizar formData cuando cambia la prop product o cuando se abre el modal
+  useEffect(() => {
+    if (isOpen) {
+      if (product) {
+        setFormData({
+          name: product.name || '',
+          sku: product.sku || '',
+          description: product.description || '',
+          category_id: product.category_id || '',
+        });
+      } else {
+        setFormData({
+          name: '',
+          sku: '',
+          description: '',
+          category_id: '',
+        });
+      }
+      setErrors({});
+    }
+  }, [product, isOpen]);
 
   const loadCategories = async () => {
     try {
@@ -77,15 +99,21 @@ export const ProductFormModal = ({
     e.preventDefault();
     if (validate()) {
       onSubmit(formData);
-      setFormData({ name: '', sku: '', description: '', category_id: '' });
+      // No resetear aquí, se reseteará cuando se cierre el modal
     }
+  };
+
+  const handleClose = () => {
+    setFormData({ name: '', sku: '', description: '', category_id: '' });
+    setErrors({});
+    onClose();
   };
 
   return (
     <Modal
       isOpen={isOpen}
       title={product ? 'Editar Producto' : 'Nuevo Producto'}
-      onClose={onClose}
+      onClose={handleClose}
     >
       <form onSubmit={handleSubmit} className="form">
         <div className="form-group">
@@ -149,7 +177,7 @@ export const ProductFormModal = ({
           <Button type="button" variant="ghost" onClick={onClose}>
             Cancelar
           </Button>
-          <Button type="submit" variant="ghost" isLoading={isLoading}>
+          <Button type="submit" variant="success" isLoading={isLoading}>
             {product ? 'Actualizar' : 'Crear'} Producto
           </Button>
         </div>

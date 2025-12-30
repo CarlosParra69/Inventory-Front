@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Modal, Button } from '../../index';
 
 interface CategoryFormModalProps {
@@ -22,11 +22,29 @@ export const CategoryFormModal = ({
   category 
 }: CategoryFormModalProps) => {
   const [formData, setFormData] = useState<CategoryFormData>({
-    name: category?.name || '',
-    description: category?.description || '',
+    name: '',
+    description: '',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Actualizar formData cuando cambia la prop category o cuando se abre el modal
+  useEffect(() => {
+    if (isOpen) {
+      if (category) {
+        setFormData({
+          name: category.name || '',
+          description: category.description || '',
+        });
+      } else {
+        setFormData({
+          name: '',
+          description: '',
+        });
+      }
+      setErrors({});
+    }
+  }, [category, isOpen]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -47,15 +65,21 @@ export const CategoryFormModal = ({
     e.preventDefault();
     if (validate()) {
       onSubmit(formData);
-      setFormData({ name: '', description: '' });
+      // No resetear aquí, se reseteará cuando se cierre el modal
     }
+  };
+
+  const handleClose = () => {
+    setFormData({ name: '', description: '' });
+    setErrors({});
+    onClose();
   };
 
   return (
     <Modal
       isOpen={isOpen}
       title={category ? 'Editar Categoría' : 'Nueva Categoría'}
-      onClose={onClose}
+      onClose={handleClose}
     >
       <form onSubmit={handleSubmit} className="form">
         <div className="form-group">

@@ -5,7 +5,7 @@ export { ProductFormModal, DeleteProductModal } from './products';
 export { CategoryFormModal, DeleteCategoryModal } from './categories';
 
 // Inventario
-export { StockEntryModal, StockExitModal, DeleteInventoryModal } from './inventory';
+export { StockEntryModal, StockExitModal } from './inventory';
 
 // Autenticación
 export { LogoutModal } from './auth';

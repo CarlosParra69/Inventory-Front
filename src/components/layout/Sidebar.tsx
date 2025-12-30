@@ -67,7 +67,7 @@ export const Sidebar = () => {
         <div className="sidebar-footer">
           {user && (
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
               className="sidebar-logout-btn"
               onClick={() => setShowLogoutModal(true)}
